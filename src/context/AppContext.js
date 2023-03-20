@@ -64,28 +64,34 @@ export const AppContext = ({ children }) => {
 
     setRatingsForSelectedItem(ratingsForSelectedItems);
   };
+//Updated logic
   const getAllSeasons = (name, totalSeasons) => {
     let totleEp = 0;
     setSeasonData([]);
     setMovieData((data) => {
       const newData = [...data];
+
       for (let i = 1; i < totalSeasons; i++) {
         fatchDataFromAPI("t=" + name + "&Season=" + i + "&plot=full")
           .then((result) => {
-            totleEp = totleEp + result.Episodes.length;
-
-            const index = newData.findIndex((item) => item.Title === name);
-            newData[index].ep = totleEp;
-
-            setSeasonData((data) => {
-              return { ...data, [name]: [...(data[name] || []), result] };
-            });
+            updateData(result, name, totleEp, newData);
           })
           .catch((err) => {});
       }
+
+      const updateData = (result, name, totleEp, newData) => {
+        totleEp = totleEp + result.Episodes.length;
+        const index = newData.findIndex((item) => item.Title === name);
+        newData[index].ep = totleEp;
+        setSeasonData((data) => {
+          return { ...data, [name]: [...(data[name] || []), result] };
+        });
+      };
+
       return newData;
     });
   };
+
   const getDataByName = (title) => {
     setLoading(true);
     fatchDataFromAPI("t=" + title)
