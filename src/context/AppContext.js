@@ -36,9 +36,8 @@ export const AppContext = ({ children }) => {
   const getPolularSeries = () => {
     setMovieData([]);
     setRatingsForSelectedItem([]);
-    popularSeries.forEach((title) => { getDataByName(title);
-
-   
+    popularSeries.forEach((title) => {
+      getDataByName(title);
     });
   };
   const onSeriesSelect = (title) => {
@@ -94,7 +93,9 @@ export const AppContext = ({ children }) => {
           return { ...data, [name]: [...(data[name] || []), ...results] };
         });
       });
+      setLoading(false);
       return newData;
+      
     });
   };
 
@@ -104,7 +105,7 @@ export const AppContext = ({ children }) => {
     promise.then((result) => {
       setMovieData((data) => [...data, result]);
       getAllSeasons(result.Title, result.totalSeasons);
-      setLoading(false);
+     
     });
   };
   const sortBy = (params) => {
