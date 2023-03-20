@@ -81,15 +81,14 @@ export default function TopNavBar() {
                 {searchBarShow && (
                   <Autocomplete
                     disablePortal
-                    defaultValue = "" 
+                    placeholder=""
                     options={searchData}
                     getOptionLabel={(option) => option.Title}
                     sx={{ minWidth: "300px", ml: 2 }}
                     fullWidth={true}
                     disableSdItemsFocusable
-                    onInputChange={(e) => {
-                      console.log("" + e.target.value);
-                      searchBy(e.target.value);
+                    onInputChange={(e,newValue) => {
+                      searchBy(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} />}
                   />
