@@ -12,7 +12,7 @@ export const AppContext = ({ children }) => {
   const [selectedSeriesName, setSelectedSeriesName] = useState("");
   const [ratingsForSelectedItem, setRatingsForSelectedItem] = useState([]);
   const [searchData, setSearchData] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     getMySeries();
     sortBy("");
@@ -40,12 +40,11 @@ export const AppContext = ({ children }) => {
     popularSeries.map((title) => getDataByName(title));
   };
   const onSeriesSelect = (title) => {
-    
     if (title === selectedSeriesName) return;
     setSelectedSeriesName(title);
-   
+
     const ratingsForSelectedItems = [];
-  
+
     seasonData[title] !== undefined &&
       seasonData[title].forEach((seasion) => {
         let rating = 0;
@@ -64,38 +63,38 @@ export const AppContext = ({ children }) => {
       });
 
     setRatingsForSelectedItem(ratingsForSelectedItems);
- 
   };
   const getAllSeasons = (name, totalSeasons) => {
     let totleEp = 0;
-    setSeasonData([]) 
-    for (let i = 1; i < totalSeasons; i++) {
-      fatchDataFromAPI("t=" + name + "&Season=" + i + "&plot=full")
-        .then((result) => {
-          totleEp = totleEp + result.Episodes.length;
-          setMovieData((data) => {
-            const newData = [...data];
+    setSeasonData([]);
+    setMovieData((data) => {
+      const newData = [...data];
+      for (let i = 1; i < totalSeasons; i++) {
+        fatchDataFromAPI("t=" + name + "&Season=" + i + "&plot=full")
+          .then((result) => {
+            totleEp = totleEp + result.Episodes.length;
+
             const index = newData.findIndex((item) => item.Title === name);
             newData[index].ep = totleEp;
-            return newData;
-          });
-          setSeasonData((data) => {
-            return { ...data, [name]: [...(data[name] || []), result] };
-          });
-        })
-        .catch((err) => {});
-    }
+
+            setSeasonData((data) => {
+              return { ...data, [name]: [...(data[name] || []), result] };
+            });
+          })
+          .catch((err) => {});
+      }
+      return newData;
+    });
   };
   const getDataByName = (title) => {
-    setLoading(true)
+    setLoading(true);
     fatchDataFromAPI("t=" + title)
       .then((result) => {
         setMovieData((data) => [...data, result]);
         getAllSeasons(result.Title, result.totalSeasons);
-     setLoading(false)
+        setLoading(false);
       })
       .catch((err) => {});
-     
   };
   const sortBy = (params) => {
     setRatingsForSelectedItem([]);
@@ -125,7 +124,7 @@ export const AppContext = ({ children }) => {
         onSeriesSelect,
         getPolularSeries,
         getMySeries,
-        loading
+        loading,
       }}
     >
       {children}
