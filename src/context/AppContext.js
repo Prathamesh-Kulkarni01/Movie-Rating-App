@@ -13,10 +13,7 @@ export const AppContext = ({ children }) => {
   const [ratingsForSelectedItem, setRatingsForSelectedItem] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    getMySeries();
-    sortBy("");
-  }, []);
+
   const searchBy = (searchQuery) => {
     fatchDataFromAPI("s=" + searchQuery)
       .then((res) => {
@@ -32,12 +29,17 @@ export const AppContext = ({ children }) => {
   const getMySeries = () => {
     setMovieData([]);
     setRatingsForSelectedItem([]);
-    mySeries.map((title) => getDataByName(title));
+    mySeries.forEach((title) => {
+      getDataByName(title);
+    });
   };
   const getPolularSeries = () => {
     setMovieData([]);
     setRatingsForSelectedItem([]);
-    popularSeries.map((title) => getDataByName(title));
+    popularSeries.forEach((title) => { getDataByName(title);
+
+   
+    });
   };
   const onSeriesSelect = (title) => {
     if (title === selectedSeriesName) return;
@@ -64,43 +66,46 @@ export const AppContext = ({ children }) => {
 
     setRatingsForSelectedItem(ratingsForSelectedItems);
   };
-//Updated logic
+  //Updated logic
   const getAllSeasons = (name, totalSeasons) => {
     let totleEp = 0;
     setSeasonData([]);
     setMovieData((data) => {
       const newData = [...data];
-
+      const promises = [];
       for (let i = 1; i < totalSeasons; i++) {
-        fatchDataFromAPI("t=" + name + "&Season=" + i + "&plot=full")
-          .then((result) => {
-            updateData(result, name, totleEp, newData);
-          })
-          .catch((err) => {});
+        const promise = fatchDataFromAPI(
+          "t=" + name + "&Season=" + i + "&plot=full"
+        );
+
+        promises.push(promise);
       }
 
-      const updateData = (result, name, totleEp, newData) => {
-        totleEp = totleEp + result.Episodes.length;
-        const index = newData.findIndex((item) => item.Title === name);
-        newData[index].ep = totleEp;
-        setSeasonData((data) => {
-          return { ...data, [name]: [...(data[name] || []), result] };
+      Promise.all(promises).then((results) => {
+        results.forEach((result) => {
+          totleEp = totleEp + result.Episodes.length;
+          const index = newData.findIndex((item) => item.Title === name);
+          const newObj = { ...newData[index] };
+          newObj.ep = totleEp;
+          newData[index] = newObj;
         });
-      };
 
+        setSeasonData((data) => {
+          return { ...data, [name]: [...(data[name] || []), ...results] };
+        });
+      });
       return newData;
     });
   };
 
   const getDataByName = (title) => {
     setLoading(true);
-    fatchDataFromAPI("t=" + title)
-      .then((result) => {
-        setMovieData((data) => [...data, result]);
-        getAllSeasons(result.Title, result.totalSeasons);
-        setLoading(false);
-      })
-      .catch((err) => {});
+    const promise = fatchDataFromAPI("t=" + title);
+    promise.then((result) => {
+      setMovieData((data) => [...data, result]);
+      getAllSeasons(result.Title, result.totalSeasons);
+      setLoading(false);
+    });
   };
   const sortBy = (params) => {
     setRatingsForSelectedItem([]);
@@ -115,6 +120,12 @@ export const AppContext = ({ children }) => {
       return newData;
     });
   };
+
+  useEffect(() => {
+    getMySeries();
+    sortBy("");
+  }, []);
+
   return (
     <Context.Provider
       value={{
