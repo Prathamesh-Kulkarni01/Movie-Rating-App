@@ -72,7 +72,7 @@ export default function TopNavBar() {
               }}
             >
               <select style={{ outline: "none", border: "none", ml: "20px" }}>
-                <option value="">Richa Shaha</option>
+                <option value="">Prathamesh Kulkarni</option>
               </select>
               <PersonOutlineIcon sx={{ margin: "0px auto" }} />
             </Box>

@@ -14,44 +14,47 @@ export const AppContext = ({ children }) => {
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const searchBy = (searchQuery) => {
-    fatchDataFromAPI("s=" + searchQuery)
-      .then((res) => {
-        if (res.Search !== undefined) {
-          setSearchData(res.Search);
-        }
-      })
-      .catch((err) => {
-        setSearchData([]);
-      });
-    return;
-  };
-  const getMySeries = () => {
+  const getSeries = async (isPopulerSelected) => {
+    const category = isPopulerSelected ? POPULAR_SERIES : MY_SERIES;
     setMovieData([]);
+    const promises = [];
     setRatingsForSelectedItem([]);
-    MY_SERIES.forEach((title) => {
-      getDataByName(title);
+    category.forEach((title) => {
+      const promise = getDataByName(title);
+      promises.push(promise);
+    });
+    const result = await Promise.all(promises);
+    setMovieData(result);
+  };
+
+  const getDataByName = async (title) => {
+    setLoading(true);
+    const result = await fatchDataFromAPI("t=" + title);
+    getAllSeasons(result.Title, result.totalSeasons);
+    return result;
+  };
+
+  const getTotalEpisodes = (seriesName) => {
+    let epCount = 0;
+    seasonData[seriesName].forEach((item) => {
+      epCount += item.Episodes.length;
+    });
+    setMovieData((data) => {
+      const newData = [...data];
+      const index = newData.findIndex((item) => item.Title === seriesName);
+      newData[index].ep = epCount;
+      return newData;
     });
   };
-  const getPolularSeries = () => {
-    setMovieData([]);
-    setRatingsForSelectedItem([]);
-    POPULAR_SERIES.forEach((title) => {
-      getDataByName(title);
-    });
-  };
+
   const onSeriesSelect = (title) => {
     if (title === selectedSeriesName) return;
-    
     setSelectedSeriesName(title);
-    // getTotalEpisodes(title)
     const ratingsForSelectedItems = [];
- getTotalEpisodes(title)
+    getTotalEpisodes(title);
     seasonData[title] !== undefined &&
       seasonData[title].forEach((seasion) => {
         let rating = 0;
-// getTotalEpisode+=seasion.Episodes.length;
-// console.log(">>>>",seasion.Episodes);
         seasion.Episodes.forEach((ep) => {
           if (ep.imdbRating !== "N/A") {
             rating = rating + Number(ep.imdbRating);
@@ -65,11 +68,10 @@ export const AppContext = ({ children }) => {
           SeasonNo: seasion.Season,
         });
       });
-      // console.log(getTotalEpisode);
     setRatingsForSelectedItem(ratingsForSelectedItems);
   };
-  //Updated logic
-  const getAllSeasons = async(name, totalSeasons) => {
+
+  const getAllSeasons = async (name, totalSeasons) => {
     setSeasonData([]);
     const promises = [];
     for (let i = 1; i <= totalSeasons; i++) {
@@ -78,70 +80,49 @@ export const AppContext = ({ children }) => {
       );
       promises.push(promise);
     }
-    const results=await Promise.all(promises)
-    
-      setSeasonData((data) => {
-        return { ...data, [name]: [...(data[name] || []), ...results] };
-      });
-    
+    const results = await Promise.all(promises);
+
+    setSeasonData((data) => {
+      return { ...data, [name]: [...(data[name] || []), ...results] };
+    });
+
     setLoading(false);
   };
 
-  const getTotalEpisodes=(seriesName)=>{
-// console.log("=>",seasonData);
-let epCount=0;
-console.log("___>",seasonData[seriesName])
-seasonData[seriesName].forEach(item=>{
-  epCount+=item.Episodes.length;
-})
-setMovieData((data)=>{
-
-const newData=[...data];
-const index=newData.findIndex(item=>
-  item.Title===seriesName
-)
-newData[index].ep=epCount
-return newData
-}
-)
-
-
-
-
-  }
-  // let totleEp = 0;
-  // results.forEach((result) => {
-  //   totleEp = totleEp + result.Episodes.length;
-  //   const index = newData.findIndex((item) => item.Title === name);
-  //   const newObj = { ...newData[index] };
-  //   newObj.ep = totleEp;
-  //   newData[index] = newObj;
-  // });
-  const getDataByName = (title) => {
-    setLoading(true);
-    const promise = fatchDataFromAPI("t=" + title);
-    promise.then((result) => {
-      setMovieData((data) => [...data, result]);
-      getAllSeasons(result.Title, result.totalSeasons);
-    });
-  };
   const sortBy = (params) => {
     setRatingsForSelectedItem([]);
     setSelectedSeriesName("");
     setMovieData((data) => {
       const newData = [...data];
-      if (params === "Sort Alphabetically(A-Z)") {
+      if (params === "ZA") {
+        newData.sort((a,b) => b.Title.localeCompare(a.Title));
+      } else if (params === "AZ") {
         newData.sort((a, b) => a.Title.localeCompare(b.Title));
+      } else if (params === "HL") {
+        newData.sort((a, b) => (a.imdbRating - b.imdbRating <= 0 ? 1 : -1));
       } else {
-        newData.sort((a, b) => (a.imdbRating - b.imdbRating < 0 ? 1 : -1));
+        newData.sort((a, b) => (a.imdbRating - b.imdbRating > 0 ? 1 : -1));
       }
       return newData;
     });
   };
 
+  const searchBy = (searchQuery) => {
+    fatchDataFromAPI("s=" + searchQuery)
+      .then((res) => {
+        if (res.Search !== undefined) {
+          setSearchData(res.Search);
+        }
+      })
+      .catch((err) => {
+        setSearchData([]);
+      });
+    return;
+  };
+
   useEffect(() => {
-    getMySeries();
-    sortBy("");
+    getSeries();
+
   }, []);
 
   return (
@@ -157,8 +138,7 @@ return newData
         searchBy,
         sortBy,
         onSeriesSelect,
-        getPolularSeries,
-        getMySeries,
+        getSeries,
         loading,
       }}
     >

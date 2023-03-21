@@ -47,7 +47,7 @@ const MovieCard = ({ item }) => {
         <CardMedia
           component="img"
           height={clicked ? "270px" : "210px"}
-          width={clicked ? "210px" : "162px"}
+          width={clicked ? "210px" : "2px"}
           style={
             clicked
               ? {
@@ -56,7 +56,7 @@ const MovieCard = ({ item }) => {
                   margin: "8px",
                   border: "3px solid white",
                 }
-              : { maxWidth: "162px" }
+              : { maxWidth: "152px" }
           }
           sx={{
             borderRadius: "15px",

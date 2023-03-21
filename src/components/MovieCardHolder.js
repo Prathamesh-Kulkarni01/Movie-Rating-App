@@ -1,27 +1,32 @@
 import React, { useContext } from "react";
 import MovieCard from "./MovieCard";
 import { Context } from "../context/AppContext";
-import { Box, CircularProgress } from "@mui/material";
+import  CircularProgress  from "@mui/material/CircularProgress";
+import { styled } from "@mui/styles";
+
+const Wrapper = styled("div")(() => ({
+  display: "flex",
+  marginLeft: "40px",
+  flexWrap: "wrap",
+  flexDirection: "row",
+}));
+const ProgressWrapper = styled("div")(() => ({
+  display: "flex",
+  justifyContent: "center",
+}));
 
 const MovieCardHolder = () => {
   const { movieData, loading } = useContext(Context);
   return loading ? (
-    <Box sx={{ display: "flex",justifyContent:'center' }}>
+    <ProgressWrapper>
       <CircularProgress />
-    </Box>
+    </ProgressWrapper>
   ) : (
-    <div
-      style={{
-        display: "flex",
-        marginLeft: "40px",
-        flexWrap: "wrap",
-        flexDirection: "row",
-      }}
-    >
-      {movieData.map((val, key) => {
+    <Wrapper>
+      {movieData.map((val)=> {
         return <MovieCard key={val.imdbID} item={val} />;
       })}
-    </div>
+    </Wrapper>
   );
 };
 

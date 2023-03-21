@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 
 const TabHolderBox = styled(Box)({
-  width: "120px",
+  width: "100px",
   minHeight: "100%",
   backgroundColor: "#3c3b3c",
   overflow: "hidden",

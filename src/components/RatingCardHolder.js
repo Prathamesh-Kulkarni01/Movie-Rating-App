@@ -21,7 +21,7 @@ const RatingCardHolder = () => {
         .map((val, key) => {
           return (
             <div key={key}>
-              {val && val.SeasonNo !== undefined && (
+              {val && val.SeasonNo  && (
                 <RatingCard key={key} item={val} />
               )}
             </div>
