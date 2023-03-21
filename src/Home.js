@@ -5,7 +5,7 @@ import React from 'react'
 const Home = () => {
   return (
    <Box>
-    <Typography sx={{marginTop:'50px'}}>Wellcome to Home Richa</Typography>
+    <Typography sx={{marginTop:'50px'}}>Wellcome to Home Prathamesh</Typography>
    </Box>
   )
 }

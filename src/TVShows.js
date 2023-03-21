@@ -1,4 +1,4 @@
-import { Box,FormControl, InputLabel, Select } from "@mui/material";
+import { Box, FormControl, MenuItem, Select } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import MovieCardHolder from "./components/MovieCardHolder";
 import RatingCardHolder from "./components/RatingCardHolder";
@@ -7,9 +7,9 @@ import { Context } from "./context/AppContext";
 const TVShows = () => {
   return (
     <Box sx={{ minHeight: "100vh" }}>
-      <TVShowsToolbar></TVShowsToolbar>
-      <MovieCardHolder></MovieCardHolder>
-      <RatingCardHolder></RatingCardHolder>
+      <TVShowsToolbar/>
+      <MovieCardHolder/>
+      <RatingCardHolder/>
     </Box>
   );
 };
@@ -17,9 +17,14 @@ const TVShows = () => {
 export default TVShows;
 
 export const TVShowsToolbar = () => {
-  const { getPolularSeries, getMySeries } = useContext(Context);
+  const { getSeries } = useContext(Context);
   const [selectedCategory, setSelectedCategory] = useState(1);
 
+  
+
+  console.log(sometingnotdefined)
+
+  
   return (
     <Box
       sx={{
@@ -32,27 +37,26 @@ export const TVShowsToolbar = () => {
     >
       <Box sx={{ padding: "15px", display: "flex", flexDirection: "row" }}>
         <Box
-          
+          variant="contained"
           style={
             selectedCategory === 1
-            ? { backgroundColor: "#FCBC34" ,color:'black'}
-            : { backgroundColor: "white" ,color:'gray'}
+              ? { backgroundColor: "#FCBC34", color: "black" }
+              : { backgroundColor: "white", color: "gray" }
           }
           sx={{
             color: "black",
             fontWeight: "550",
             marginLeft: "50px",
             borderRadius: "0px",
-            boxShadow:'none',
             width: "160px",
             height: "45px",
-            display:'flex',
-            justifyContent:'center',
-            alignItems:'center'
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
           onClick={() => {
             setSelectedCategory(1);
-            getMySeries();
+            getSeries();
           }}
         >
           My Series
@@ -61,8 +65,8 @@ export const TVShowsToolbar = () => {
           variant="contained"
           style={
             selectedCategory === 2
-              ? { backgroundColor: "#FCBC34" ,color:'black'}
-              : { backgroundColor: "white" ,color:'gray'}
+              ? { backgroundColor: "#FCBC34", color: "black" }
+              : { backgroundColor: "white", color: "gray" }
           }
           sx={{
             color: "black",
@@ -70,14 +74,13 @@ export const TVShowsToolbar = () => {
             borderRadius: "0px",
             width: "160px",
             height: "45px",
-            boxShadow:'none',
-            display:'flex',
-            justifyContent:'center',
-            alignItems:'center'
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
           onClick={() => {
             setSelectedCategory(2);
-            getPolularSeries();
+            getSeries(true);
           }}
         >
           Popular
@@ -90,38 +93,29 @@ export const TVShowsToolbar = () => {
 };
 
 const SortBox = () => {
-  const [label, setLabel] = useState("Rating(High to Low)");
   const { sortBy } = useContext(Context);
-  useEffect(() => {
-    sortBy(label);
-  }, []);
 
-  const handleSortClick = () => {
-    setLabel(
-      label === "Rating(High to Low)"
-        ? "Sort Alphabetically(A-Z)"
-        : "Rating(High to Low)"
-    );
+  const handleChange = (event) => {
+    sortBy(event.target.value);
   };
 
   return (
     <Box sx={{ display: "flex", alignItems: "center", marginLeft: "30px" }}>
       <p style={{ color: "gray" }}>Sort By </p>
 
-      <FormControl
-        onClick={() => {
-          handleSortClick();
-          sortBy(label);
-        }}
-        sx={{ m: 2, minWidth: 260 }}
-        disabled
-      >
-        <InputLabel id="demo-simple-select-disabled-label">{label}</InputLabel>
+      <FormControl sx={{ m: 2, minWidth: 260 }}>
+        {/* <InputLabel id="demo-simple-select-label">{label}</InputLabel> */}
         <Select
-          defaultValue=""
-          labelId="demo-simple-select-disabled-label"
-          id="demo-simple-select-disabled"
-        ></Select>
+          defaultValue={"LA"}
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          onChange={(e) => handleChange(e)}
+        >
+          <MenuItem value={"AZ"}>Sort Alphabetically(A-Z)</MenuItem>
+          <MenuItem value={"ZA"}>Sort Alphabetically(Z-A)</MenuItem>
+          <MenuItem value={"LH"}>Rating(Low to High)</MenuItem>
+          <MenuItem value={"HL"}>Rating(High to Low)</MenuItem>
+        </Select>
       </FormControl>
     </Box>
   );

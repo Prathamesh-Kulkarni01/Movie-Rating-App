@@ -1,16 +1,17 @@
 import { Card, CircularProgress } from "@mui/material";
+import { styled } from "@mui/styles";
 import React from "react";
+
+const CardWrapper = styled(Card)(() => ({
+  minWidth: "200px",
+  minHeight: "200px",
+  margin: "8px",
+  padding: "12px",
+}));
 
 const RatingCard = ({ item }) => {
   return (
-    <Card
-      sx={{
-        minWidth: "200px",
-        minHeight: "200px",
-        margin: "8px",
-        padding: "12px",
-      }}
-    >
+    <CardWrapper>
       {item.SeasonNo && (
         <h3 style={{ textAlign: "start" }}>Season {item.SeasonNo}</h3>
       )}
@@ -29,7 +30,7 @@ const RatingCard = ({ item }) => {
           value={item.rating}
         />
       </div>
-    </Card>
+    </CardWrapper>
   );
 };
 
