@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 
-import { mySeries, popularSeries } from "../constants/constants";
+import { MY_SERIES, POPULAR_SERIES } from "../constants/constants";
 
 import { fatchDataFromAPI } from "../utils/api";
 
@@ -29,26 +29,29 @@ export const AppContext = ({ children }) => {
   const getMySeries = () => {
     setMovieData([]);
     setRatingsForSelectedItem([]);
-    mySeries.forEach((title) => {
+    MY_SERIES.forEach((title) => {
       getDataByName(title);
     });
   };
   const getPolularSeries = () => {
     setMovieData([]);
     setRatingsForSelectedItem([]);
-    popularSeries.forEach((title) => {
+    POPULAR_SERIES.forEach((title) => {
       getDataByName(title);
     });
   };
   const onSeriesSelect = (title) => {
     if (title === selectedSeriesName) return;
+    
     setSelectedSeriesName(title);
-
+    // getTotalEpisodes(title)
     const ratingsForSelectedItems = [];
-
+ getTotalEpisodes(title)
     seasonData[title] !== undefined &&
       seasonData[title].forEach((seasion) => {
         let rating = 0;
+// getTotalEpisode+=seasion.Episodes.length;
+// console.log(">>>>",seasion.Episodes);
         seasion.Episodes.forEach((ep) => {
           if (ep.imdbRating !== "N/A") {
             rating = rating + Number(ep.imdbRating);
@@ -62,50 +65,64 @@ export const AppContext = ({ children }) => {
           SeasonNo: seasion.Season,
         });
       });
-
+      // console.log(getTotalEpisode);
     setRatingsForSelectedItem(ratingsForSelectedItems);
   };
   //Updated logic
-  const getAllSeasons = (name, totalSeasons) => {
-    let totleEp = 0;
+  const getAllSeasons = async(name, totalSeasons) => {
     setSeasonData([]);
-    setMovieData((data) => {
-      const newData = [...data];
-      const promises = [];
-      for (let i = 1; i < totalSeasons; i++) {
-        const promise = fatchDataFromAPI(
-          "t=" + name + "&Season=" + i + "&plot=full"
-        );
-
-        promises.push(promise);
-      }
-
-      Promise.all(promises).then((results) => {
-        results.forEach((result) => {
-          totleEp = totleEp + result.Episodes.length;
-          const index = newData.findIndex((item) => item.Title === name);
-          const newObj = { ...newData[index] };
-          newObj.ep = totleEp;
-          newData[index] = newObj;
-        });
-
-        setSeasonData((data) => {
-          return { ...data, [name]: [...(data[name] || []), ...results] };
-        });
+    const promises = [];
+    for (let i = 1; i <= totalSeasons; i++) {
+      const promise = fatchDataFromAPI(
+        "t=" + name + "&Season=" + i + "&plot=full"
+      );
+      promises.push(promise);
+    }
+    const results=await Promise.all(promises)
+    
+      setSeasonData((data) => {
+        return { ...data, [name]: [...(data[name] || []), ...results] };
       });
-      setLoading(false);
-      return newData;
-      
-    });
+    
+    setLoading(false);
   };
 
+  const getTotalEpisodes=(seriesName)=>{
+// console.log("=>",seasonData);
+let epCount=0;
+console.log("___>",seasonData[seriesName])
+seasonData[seriesName].forEach(item=>{
+  epCount+=item.Episodes.length;
+})
+setMovieData((data)=>{
+
+const newData=[...data];
+const index=newData.findIndex(item=>
+  item.Title===seriesName
+)
+newData[index].ep=epCount
+return newData
+}
+)
+
+
+
+
+  }
+  // let totleEp = 0;
+  // results.forEach((result) => {
+  //   totleEp = totleEp + result.Episodes.length;
+  //   const index = newData.findIndex((item) => item.Title === name);
+  //   const newObj = { ...newData[index] };
+  //   newObj.ep = totleEp;
+  //   newData[index] = newObj;
+  // });
   const getDataByName = (title) => {
     setLoading(true);
     const promise = fatchDataFromAPI("t=" + title);
     promise.then((result) => {
       setMovieData((data) => [...data, result]);
       getAllSeasons(result.Title, result.totalSeasons);
-     
     });
   };
   const sortBy = (params) => {

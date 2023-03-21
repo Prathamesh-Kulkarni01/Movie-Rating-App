@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, InputLabel, Select } from "@mui/material";
+import { Box,FormControl, InputLabel, Select } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import MovieCardHolder from "./components/MovieCardHolder";
 import RatingCardHolder from "./components/RatingCardHolder";
@@ -31,20 +31,24 @@ export const TVShowsToolbar = () => {
       }}
     >
       <Box sx={{ padding: "15px", display: "flex", flexDirection: "row" }}>
-        <Button
-          variant="contained"
+        <Box
+          
           style={
             selectedCategory === 1
-              ? { backgroundColor: "#FCBC34" }
-              : { backgroundColor: "white" }
+            ? { backgroundColor: "#FCBC34" ,color:'black'}
+            : { backgroundColor: "white" ,color:'gray'}
           }
           sx={{
             color: "black",
             fontWeight: "550",
             marginLeft: "50px",
             borderRadius: "0px",
+            boxShadow:'none',
             width: "160px",
             height: "45px",
+            display:'flex',
+            justifyContent:'center',
+            alignItems:'center'
           }}
           onClick={() => {
             setSelectedCategory(1);
@@ -52,13 +56,13 @@ export const TVShowsToolbar = () => {
           }}
         >
           My Series
-        </Button>
-        <Button
+        </Box>
+        <Box
           variant="contained"
           style={
             selectedCategory === 2
-              ? { backgroundColor: "#FCBC34" }
-              : { backgroundColor: "white" }
+              ? { backgroundColor: "#FCBC34" ,color:'black'}
+              : { backgroundColor: "white" ,color:'gray'}
           }
           sx={{
             color: "black",
@@ -66,6 +70,10 @@ export const TVShowsToolbar = () => {
             borderRadius: "0px",
             width: "160px",
             height: "45px",
+            boxShadow:'none',
+            display:'flex',
+            justifyContent:'center',
+            alignItems:'center'
           }}
           onClick={() => {
             setSelectedCategory(2);
@@ -73,7 +81,7 @@ export const TVShowsToolbar = () => {
           }}
         >
           Popular
-        </Button>
+        </Box>
       </Box>
 
       <SortBox />
