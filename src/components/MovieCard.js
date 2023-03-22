@@ -6,6 +6,7 @@ import  CardActionArea from "@mui/material/CardActionArea";
 import  Box from "@mui/material/Box";
 
 import { Context } from "../context/AppContext";
+import { Typography } from "@mui/material";
 
 const MovieCard = ({ item }) => {
   const { selectedSeriesName, onSeriesSelect } = useContext(Context);
@@ -18,7 +19,7 @@ const MovieCard = ({ item }) => {
       setClicked(false);
     }
     return () => {};
-  }, [selectedSeriesName]);
+  }, [item.Title, selectedSeriesName]);
 
   const handleSelectedCard = () => {
     onSeriesSelect(item.Title);
@@ -34,35 +35,23 @@ const MovieCard = ({ item }) => {
       onClick={() => handleSelectedCard()}
     >
       <CardActionArea
-        sx={
-          clicked
-            ? {
-                display: "flex",
-                flexDirection: "row-reverse",
-                backgroundColor: "#3FCBC34",
-              }
-            : { display: "flex", flexDirection: "column" }
-        }
+        sx={{
+          display: "flex",
+          flexDirection: clicked ? "row-reverse" : "column",
+          backgroundColor: clicked ? "#3FCBC34" : "transparent",
+        }}
       >
         <CardMedia
           component="img"
           height={clicked ? "270px" : "210px"}
           width={clicked ? "210px" : "2px"}
-          style={
-            clicked
-              ? {
-                  maxWidth: "180px",
-                  padding: "0px",
-                  margin: "8px",
-                  border: "3px solid white",
-                }
-              : { maxWidth: "152px" }
-          }
           sx={{
             borderRadius: "15px",
-            
             margin: "6px",
-            objectFit:'fill'
+            objectFit: "fill",
+            maxWidth: clicked ? "180px" : "152px",
+            padding: clicked ? "0px" : "initial",
+            border: clicked ? "3px solid white" : "initial",
           }}
           image={item.Poster}
           alt="poster"
@@ -73,7 +62,7 @@ const MovieCard = ({ item }) => {
             flexDirection: "column",
             justifyContent: "start",
             padding: "0",
-            margin: "0px",
+            margin: clicked ? "0px" : "10px",
             width: "100%",
           }}
         >
@@ -81,7 +70,7 @@ const MovieCard = ({ item }) => {
             sx={
               clicked
                 ? { width: "190px", marginLeft: "25px" }
-                : { margin: "10px", padding: "0px", width: "100%" }
+                : { margin: "0px 10px 10px", padding: "0px", width: "100%" }
             }
           >
             <h2
@@ -117,12 +106,14 @@ const MovieCard = ({ item }) => {
                   : { display: "none" }
               }
             >
-              {item.totalSeasons} Seasions
+              {item.totalSeasons} Seasons
             </h4>
             <Box
-              style={clicked ? { height: "130px" } : { height: "0px" }}
-            ></Box>
-          </Box>
+          sx={{
+            height: clicked ? '130px' : '0px'
+          }}
+        ></Box>
+      </Box>
           <Box sx={clicked ? { marginLeft: "25px" } : { marginLeft: "10px" }}>
             <p
               style={

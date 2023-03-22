@@ -7,8 +7,9 @@ import HomeIcon from "@mui/icons-material/Home";
 import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
 import TheatersIcon from "@mui/icons-material/Theaters";
 
-import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const TabHolderBox = styled(Box)({
   width: "100px",

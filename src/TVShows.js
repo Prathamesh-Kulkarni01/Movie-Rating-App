@@ -1,5 +1,9 @@
-import { Box, FormControl, MenuItem, Select } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Box from "@mui/material/Box";
+
+import React, { useContext, useState } from "react";
 import MovieCardHolder from "./components/MovieCardHolder";
 import RatingCardHolder from "./components/RatingCardHolder";
 import { Context } from "./context/AppContext";
@@ -7,9 +11,9 @@ import { Context } from "./context/AppContext";
 const TVShows = () => {
   return (
     <Box sx={{ minHeight: "100vh" }}>
-      <TVShowsToolbar/>
-      <MovieCardHolder/>
-      <RatingCardHolder/>
+      <TVShowsToolbar />
+      <MovieCardHolder />
+      <RatingCardHolder />
     </Box>
   );
 };
@@ -20,11 +24,6 @@ export const TVShowsToolbar = () => {
   const { getSeries } = useContext(Context);
   const [selectedCategory, setSelectedCategory] = useState(1);
 
-  
-
-  console.log(sometingnotdefined)
-
-  
   return (
     <Box
       sx={{
@@ -38,13 +37,10 @@ export const TVShowsToolbar = () => {
       <Box sx={{ padding: "15px", display: "flex", flexDirection: "row" }}>
         <Box
           variant="contained"
-          style={
-            selectedCategory === 1
-              ? { backgroundColor: "#FCBC34", color: "black" }
-              : { backgroundColor: "white", color: "gray" }
-          }
           sx={{
-            color: "black",
+            backgroundColor:
+              selectedCategory === 1 ? "#FCBC34" : "white",
+            color: selectedCategory === 1 ? "black" : "gray",
             fontWeight: "550",
             marginLeft: "50px",
             borderRadius: "0px",
@@ -63,13 +59,10 @@ export const TVShowsToolbar = () => {
         </Box>
         <Box
           variant="contained"
-          style={
-            selectedCategory === 2
-              ? { backgroundColor: "#FCBC34", color: "black" }
-              : { backgroundColor: "white", color: "gray" }
-          }
           sx={{
-            color: "black",
+            backgroundColor:
+              selectedCategory === 2 ? "#FCBC34" : "white",
+            color: selectedCategory === 2 ? "black" : "gray",
             fontWeight: "550",
             borderRadius: "0px",
             width: "160px",
@@ -104,7 +97,6 @@ const SortBox = () => {
       <p style={{ color: "gray" }}>Sort By </p>
 
       <FormControl sx={{ m: 2, minWidth: 260 }}>
-        {/* <InputLabel id="demo-simple-select-label">{label}</InputLabel> */}
         <Select
           defaultValue={"LA"}
           labelId="demo-simple-select-label"
