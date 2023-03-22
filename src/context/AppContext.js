@@ -7,6 +7,7 @@ import { fetchDataFromAPI } from "../utils/api";
 export const Context = createContext();
 
 export const AppContext = ({ children }) => {
+  // State variables
   const [movieData, setMovieData] = useState([]);
   const [seasonData, setSeasonData] = useState([]);
   const [selectedSeriesName, setSelectedSeriesName] = useState("");
@@ -14,10 +15,10 @@ export const AppContext = ({ children }) => {
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const getSeries = async (isPopulerSelected) => {
-    const category = isPopulerSelected ? POPULAR_SERIES : MY_SERIES;
+  // Get series data (popular or my series)
+  const getSeries = async (isPopularSelected) => {
+    const category = isPopularSelected ? POPULAR_SERIES : MY_SERIES;
     setMovieData([]);
-
     setRatingsForSelectedItem([]);
     const promises = category.map((title) => getDataByName(title));
     const results = await Promise.allSettled(promises);
@@ -27,6 +28,8 @@ export const AppContext = ({ children }) => {
     setMovieData(movies);
   };
 
+
+  // Get data for a series by name
   const getDataByName = async (title) => {
     setLoading(true);
     const result = await fetchDataFromAPI("t=" + title);
@@ -35,6 +38,7 @@ export const AppContext = ({ children }) => {
     return result;
   };
 
+   // Get total number of episodes for a series
   const getTotalEpisodes = useMemo(() => (seriesName) => {
     let epCount = 0;
     seasonData[seriesName].forEach((item) => {
@@ -48,30 +52,32 @@ export const AppContext = ({ children }) => {
     });
   }, [seasonData]);
 
+   // Handle selection of a series
   const onSeriesSelect = (title) => {
     if (title === selectedSeriesName) return;
     setSelectedSeriesName(title);
     const ratingsForSelectedItems = [];
     getTotalEpisodes(title);
+    console.log("",seasonData);
     seasonData[title] !== undefined &&
-      seasonData[title].forEach((seasion) => {
+      seasonData[title].forEach((season) => {
         let rating = 0;
-        seasion.Episodes.forEach((ep) => {
+        season.Episodes.forEach((ep) => {
           if (ep.imdbRating !== "N/A") {
             rating = rating + Number(ep.imdbRating);
           }
         });
         const ratingValue = parseFloat(
-          parseInt(((rating * 10) / seasion.Episodes.length) * 10) / 10
+          parseInt(((rating * 10) / season.Episodes.length) * 10) / 10
         );
         ratingsForSelectedItems.push({
           rating: ratingValue,
-          SeasonNo: seasion.Season,
+          SeasonNo: season.Season,
         });
       });
     setRatingsForSelectedItem(ratingsForSelectedItems);
   };
-
+// Get all seasons of a series
   const getAllSeasons = async (name, totalSeasons) => {
     setSeasonData([]);
     const promises = [];
@@ -82,12 +88,12 @@ export const AppContext = ({ children }) => {
       promises.push(promise);
     }
     const results = await Promise.all(promises);
-
     setSeasonData((data) => {
       return { ...data, [name]: [...(data[name] || []), ...results] };
     });
   };
 
+  // Sort by query 
   const sortBy = (params) => {
     setRatingsForSelectedItem([]);
     setSelectedSeriesName("");
@@ -106,6 +112,7 @@ export const AppContext = ({ children }) => {
     });
   };
 
+  //Search by query
   const searchBy = useCallback(
     async (searchQuery) => {
       try {

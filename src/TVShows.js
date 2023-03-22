@@ -87,9 +87,10 @@ export const TVShowsToolbar = () => {
 
 const SortBox = () => {
   const { sortBy } = useContext(Context);
-
+const [searchQuery, setSearchQuery] = useState("HL")
   const handleChange = (event) => {
     sortBy(event.target.value);
+    setSearchQuery(event.target.value)
   };
 
   return (
@@ -98,7 +99,7 @@ const SortBox = () => {
 
       <FormControl sx={{ m: 2, minWidth: 260 }}>
         <Select
-          defaultValue={"LA"}
+          value={searchQuery}
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           onChange={(e) => handleChange(e)}
