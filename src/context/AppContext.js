@@ -15,8 +15,17 @@ export const AppContext = ({ children }) => {
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(false);
 
+
+  const getDataByName = useCallback(async (title) => {
+    setLoading(true);
+    const result = await fetchDataFromAPI("t=" + title);
+    getAllSeasons(result.Title, result.totalSeasons);
+    setLoading(false);
+    return result;
+  },[]);
+
   // Get series data (popular or my series)
-  const getSeries = async (isPopularSelected) => {
+  const getSeries = useCallback(async (isPopularSelected) => {
     const category = isPopularSelected ? POPULAR_SERIES : MY_SERIES;
     setMovieData([]);
     setRatingsForSelectedItem([]);
@@ -26,17 +35,11 @@ export const AppContext = ({ children }) => {
       .filter((result) => result.status === "fulfilled")
       .map((result) => result.value);
     setMovieData(movies);
-  };
+  },[getDataByName,]);
 
 
   // Get data for a series by name
-  const getDataByName = async (title) => {
-    setLoading(true);
-    const result = await fetchDataFromAPI("t=" + title);
-    getAllSeasons(result.Title, result.totalSeasons);
-    setLoading(false);
-    return result;
-  };
+ 
 
    // Get total number of episodes for a series
   const getTotalEpisodes = useMemo(() => (seriesName) => {
@@ -126,7 +129,7 @@ export const AppContext = ({ children }) => {
 
   useEffect(() => {
     getSeries(false);
-  }, []);
+  }, [getSeries]);
 
   return (
     <Context.Provider
