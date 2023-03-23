@@ -3,7 +3,9 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import SearchIcon from "@mui/icons-material/Search";
-import { Autocomplete, MenuItem, TextField } from "@mui/material";
+import Autocomplete from '@mui/material/Autocomplete';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import moment from "moment";
@@ -21,8 +23,16 @@ export default function TopNavBar() {
     setDateTime(moment().format("d MMM, hh:mm"));
   }, 1000);
   return (
-    <Box sx={{}}>
-      <AppBar position="static" sx={{ bgcolor: "#efeeef", color: "black" }}>
+    <Box>
+      <AppBar
+        position="fixed"
+        sx={{
+          bgcolor: "#efeeef",
+          color: "black",
+          left: 100,
+          width: "calc(100vw - 100px)",
+        }}
+      >
         <Toolbar
           sx={{
             display: "flex",
@@ -87,7 +97,7 @@ export default function TopNavBar() {
                     sx={{ minWidth: "300px", ml: 2 }}
                     fullWidth={true}
                     disableSdItemsFocusable
-                    onInputChange={(e,newValue) => {
+                    onInputChange={(e, newValue) => {
                       searchBy(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} />}

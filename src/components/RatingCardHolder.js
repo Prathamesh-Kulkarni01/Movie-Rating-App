@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import React, { useContext } from "react";
 import { Context } from "../context/AppContext";
 import RatingCard from "./RatingCard";
@@ -6,8 +7,8 @@ const RatingCardHolder = () => {
   const { ratingsForSelectedItem } = useContext(Context);
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         display: "flex",
         marginLeft: "40px",
         flexWrap: "wrap",
@@ -21,13 +22,11 @@ const RatingCardHolder = () => {
         .map((val, key) => {
           return (
             <div key={key}>
-              {val && val.SeasonNo  && (
-                <RatingCard key={key} item={val} />
-              )}
+              {val && val.SeasonNo && <RatingCard key={key} item={val} />}
             </div>
           );
         })}
-    </div>
+    </Box>
   );
 };
 

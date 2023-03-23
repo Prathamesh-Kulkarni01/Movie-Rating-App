@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import MovieCard from "./MovieCard";
 import { Context } from "../context/AppContext";
-import  CircularProgress  from "@mui/material/CircularProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/styles";
 
 const Wrapper = styled("div")(() => ({
@@ -23,7 +23,7 @@ const MovieCardHolder = () => {
     </ProgressWrapper>
   ) : (
     <Wrapper>
-      {movieData.map((val)=> {
+      {movieData.map((val) => {
         return <MovieCard key={val.imdbID} item={val} />;
       })}
     </Wrapper>

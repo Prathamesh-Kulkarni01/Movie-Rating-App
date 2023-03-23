@@ -17,7 +17,7 @@ function App() {
       <Box className="App" sx={{ display: "flex",width:'100%' }}>
         <BrowserRouter>
           <LeftToolBar/>
-          <Box sx={{ width: "100%", minHeight: "100vh" }}>
+          <Box sx={{ width: "100%", minHeight: "100vh",ml:10 ,mt:10}}>
             <TopNavBar />
             <Routes>
               <Route exact path="/" element={<Home />} />

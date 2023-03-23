@@ -58,7 +58,6 @@ export const AppContext = ({ children }) => {
     setSelectedSeriesName(title);
     const ratingsForSelectedItems = [];
     getTotalEpisodes(title);
-    console.log("",seasonData);
     seasonData[title] !== undefined &&
       seasonData[title].forEach((season) => {
         let rating = 0;
@@ -95,8 +94,6 @@ export const AppContext = ({ children }) => {
 
   // Sort by query 
   const sortBy = (params) => {
-    setRatingsForSelectedItem([]);
-    setSelectedSeriesName("");
     setMovieData((data) => {
       const newData = [...data];
       if (params === "ZA") {

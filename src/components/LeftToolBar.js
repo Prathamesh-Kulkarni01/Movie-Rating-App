@@ -10,18 +10,32 @@ import TheatersIcon from "@mui/icons-material/Theaters";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 const TabHolderBox = styled(Box)({
   width: "100px",
   minHeight: "100%",
   backgroundColor: "#3c3b3c",
   overflow: "hidden",
+  position:"fixed"
 });
 
 const LeftToolBar = () => {
   const [value, setValue] = React.useState(0);
   const navigate = useNavigate();
   const routes = ["/", "/tv-shows", "/movies"];
+  const tabStack = [
+    {
+      icon: <HomeIcon />,
+      label: "Home",
+    },
+    {
+      icon: <OndemandVideoIcon />,
+      label: "TV Shows",
+    },
+    {
+      icon: <TheatersIcon />,
+      label: "Movies",
+    },
+  ];
 
   useEffect(() => {
     let urlPath = window.location.pathname;
@@ -43,31 +57,28 @@ const LeftToolBar = () => {
     <TabHolderBox>
       <Tabs
         value={value}
+        sx={{mt:8}}
         orientation="vertical"
         indicatorColor={"#000000"}
-        
-        style={{ padding: " 80px  5px 10px"  }}
         onChange={handleChange}
-        aria-label="icon label tabs example"
       >
-        <Tab
-        style={{ padding: " 30px 5px" }}
-          sx={{ color: "gray",pb: "40px"  }}
-          icon={<HomeIcon />}
-          label="Home"
-        ></Tab>
-        <Tab
-          style={{ padding: " 30px 5px" }}
-          sx={{ color: "gray", pb: "40px" }}
-          icon={<OndemandVideoIcon />}
-          label="TV Shows"
-        />
-        <Tab
-         style={{ padding: " 30px 5px" }}
-          sx={{ color: "gray", pb: "40px" }}
-          icon={<TheatersIcon />}
-          label="Movies"
-        />
+        {tabStack.map((item,key) => {
+          return (
+            <Tab
+            key={key}
+              sx={{
+                fontSize: ".6rem",
+                color: "gray",
+                pt: 4,
+                "&.Mui-selected": {
+                  color: "#FCBC34",
+                },
+              }}
+              icon={item.icon}
+              label={item.label}
+            ></Tab>
+          );
+        })}
       </Tabs>
     </TabHolderBox>
   );

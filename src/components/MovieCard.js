@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import  CardActionArea from "@mui/material/CardActionArea";
-import  Box from "@mui/material/Box";
+import CardActionArea from "@mui/material/CardActionArea";
+import Box from "@mui/material/Box";
 
 import { Context } from "../context/AppContext";
 import { Typography } from "@mui/material";
@@ -31,7 +31,7 @@ const MovieCard = ({ item }) => {
           ? { backgroundColor: "#fbbb34", width: "410px" }
           : { width: "170px", height: "290px" }
       }
-      sx={{ margin: "10px"}}
+      sx={{ margin: "10px" }}
       onClick={() => handleSelectedCard()}
     >
       <CardActionArea
@@ -73,69 +73,85 @@ const MovieCard = ({ item }) => {
                 : { margin: "0px 10px 10px", padding: "0px", width: "100%" }
             }
           >
-            <h2
-              style={
-                clicked
+            <Typography
+              variant="h2"
+              sx={{
+                textAlign: "start",
+                margin: 0,
+                ...(clicked
                   ? {
-                      textAlign: "start",
-                      margin: "0px",
-                      padding: "0px",
+                      padding: 0,
                       color: "white",
+                      fontWeight: "600",
+                      fontSize: "18px",
                     }
-                  : { textAlign: "start", margin: "0px" , fontSize:'18px'}
-              }
+                  : {
+                      fontSize: "18px",
+                    }),
+              }}
             >
               {item.Title}
-            </h2>
-            <h4
-              style={
-                clicked
-                  ? { textAlign: "start", margin: "1px", color: "white" }
-                  : { display: "none" }
-              }
+            </Typography>
+            <Typography
+              variant="h4"
+              sx={{
+                textAlign: "start",
+                margin: "1px",
+                fontSize: "13px",
+                fontWeight: "600",
+                color: clicked ? "white" : "initial",
+                display: clicked ? "block" : "none",
+              }}
             >
               {item.ep} Episodes
-            </h4>
-            <h4
-         
+            </Typography>
+            <Typography
               variant="h5"
               component="div"
-              style={
-                clicked
-                  ? { textAlign: "start", margin: "1px", color: "white" }
-                  : { display: "none" }
-              }
+              sx={{
+                textAlign: "start",
+                margin: "1px",
+                fontSize: "13px",
+                fontWeight: "600",
+                color: clicked ? "white" : "initial",
+                display: clicked ? "block" : "none",
+              }}
             >
               {item.totalSeasons} Seasons
-            </h4>
+            </Typography>
             <Box
-          sx={{
-            height: clicked ? '130px' : '0px'
-          }}
-        ></Box>
-      </Box>
+              sx={{
+                height: clicked ? "130px" : "0px",
+              }}
+            ></Box>
+          </Box>
           <Box sx={clicked ? { marginLeft: "25px" } : { marginLeft: "10px" }}>
-            <p
-              style={
-                clicked
-                  ? { textAlign: "start", color: "white" }
-                  : {
-                      textAlign: "start",
-                      marginTop: "-2px",
-                    }
-              }
+            <Typography
+              variant="body1"
+              component="p"
+              sx={{
+                textAlign: "start",
+                fontSize: "13px",
+                fontWeight: "600",
+                color: clicked ? "white" : "initial",
+                marginTop: clicked ? 0 : "-2px",
+              }}
             >
               <strong>IMDB Rating :</strong> {item.imdbRating}
-            </p>
-            <p
-              style={
-                clicked
-                  ? { textAlign: "start", color: "white" }
-                  : { display: "none" }
-              }
+            </Typography>
+            <Typography
+              variant="body1"
+              component="p"
+              sx={{
+                textAlign: "start",
+                fontSize: "13px",
+                fontWeight: "600",
+                color: clicked ? "white" : "initial",
+                display: clicked ? "block" : "none",
+              }}
             >
               <strong>Go to IMDB Page</strong>
-            </p>
+            </Typography>
           </Box>
         </CardContent>
       </CardActionArea>
