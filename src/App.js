@@ -14,11 +14,11 @@ import "./App.css";
 function App() {
   return (
     <AppContext>
-      <Box className="App" sx={{ display: "flex",width:'100%' }}>
+      <Box className="App" sx={{ display: "flex",width:'100%',overflow:'hidden' }}>
         <BrowserRouter>
           <LeftToolBar/>
-          <Box sx={{ width: "100%", minHeight: "100vh",ml:10 ,mt:10}}>
-            <TopNavBar />
+          <Box sx={{ width: "100%", minHeight: "100vh",ml:10 ,mt:10,overflow:'hidden'}}>
+           <TopNavBar/>
             <Routes>
               <Route exact path="/" element={<Home />} />
               <Route exact path="/tv-shows" element={<TVShows />} />

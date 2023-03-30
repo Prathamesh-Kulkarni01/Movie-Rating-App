@@ -10,7 +10,7 @@ import { Context } from "./context/AppContext";
 
 const TVShows = () => {
   return (
-    <Box sx={{ minHeight: "100vh" }}>
+    <Box sx={{ maxHeight: "100vh" , overflow:"auto"}}>
       <TVShowsToolbar />
       <MovieCardHolder />
       <RatingCardHolder />

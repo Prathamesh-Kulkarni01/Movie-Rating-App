@@ -12,6 +12,8 @@ const RatingCardHolder = () => {
         display: "flex",
         marginLeft: "40px",
         flexWrap: "wrap",
+        height:'100%',
+        marginBottom:"100px",
         flexDirection: "row",
       }}
     >
